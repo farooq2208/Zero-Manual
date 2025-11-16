@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentPilot AI - AI-Powered Job Search</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f9fafb;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 50px 45px;
+            box-shadow: 
+                0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .ai-badge::before {
+            content: '🏥'; /* Changed from ✦ to keep theme style, but keeping the original emoji style of the first page */
+            font-size: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem; /* Changed from 2.75rem */
+            font-weight: 700; /* Changed from 800 */
+            color: #1f2937; /* Changed from #ffffff */
+            margin-bottom: 14px;
+            letter-spacing: -1px;
+            text-shadow: none; /* Removed text-shadow */
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: #6b7280; /* Changed from #a0aec0 */
+            line-height: 1.7;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 30px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #4f46e5;
+        }
+
+        .back-link::before {
+            content: '←';
+            font-size: 1.25rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151; /* Changed from #cbd5e0 */
+            margin-bottom: 8px; /* Changed from 10px */
+            letter-spacing: normal; /* Changed from 0.5px */
+        }
+        
+        /* Added from first page */
+        label .required {
+            color: #ef4444;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 14px; /* Changed from 14px 16px */
+            font-size: 0.95rem;
+            color: #1f2937; /* Changed from #e2e8f0 */
+            background: #ffffff; /* Changed from rgba(30, 41, 59, 0.6) */
+            border: 1.5px solid #d1d5db; /* Changed from rgba(255, 255, 255, 0.1) */
+            border-radius: 8px; /* Changed from 10px */
+            transition: all 0.2s ease; /* Changed from 0.3s ease */
+            font-family: inherit;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #6366f1; /* Changed from #667eea */
+            background: #ffffff; /* Changed from rgba(30, 41, 59, 0.8) */
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); /* Changed from rgba(102, 126, 234, 0.15) */
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #9ca3af; /* Changed from #64748b */
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); /* Changed stroke color to fit light theme */
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px; /* Changed from 18px */
+            font-size: 1rem;
+            font-weight: 600; /* Changed from 700 */
+            color: white;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); /* Changed gradient colors and direction */
+            border: none;
+            border-radius: 8px; /* Changed from 10px */
+            cursor: pointer;
+            transition: all 0.2s ease; /* Changed from 0.3s ease */
+            text-transform: none; /* Removed uppercase */
+            letter-spacing: normal; /* Removed letter-spacing */
+            margin-top: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* Changed box-shadow */
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); /* Changed box-shadow */
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .confirmation {
+            display: none;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 18px 24px; /* Changed from 20px 24px */
+            border-radius: 8px; /* Changed from 10px */
+            text-align: center;
+            font-size: 1rem; /* Changed from 1.05rem */
+            font-weight: 600;
+            margin-top: 24px;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); /* Changed box-shadow */
+            border: none; /* Removed border */
+        }
+
+        .confirmation.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Removed .info-box CSS as it was not in the original second page */
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 24px;
+            }
+
+            h1 {
+                font-size: 2rem; /* Changed from 2.25rem */
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">Back to Workflows</a>
+        
+        <div class="header">
+            <span class="ai-badge">AI-Powered</span>
+            <h1>TalentPilot AI</h1>
+            <p class="subtitle">Tell us what job you are searching for — we'll find matching leads for you.</p>
+        </div>
+        
+        <form id="jobForm" action="http://localhost:5678/webhook-test/d7e74325-b7d6-436b-95ab-7130bc829a5c" method="POST">
+            <div class="form-grid">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            placeholder="John Doe" 
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number <span class="required">*</span></label>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            name="phone" 
+                            placeholder="+1 (555) 000-0000" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="your.email@example.com" 
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="jobTitle">Job Title <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            id="jobTitle" 
+                            name="jobTitle" 
+                            placeholder="e.g., Senior Software Engineer" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="education">Education Level <span class="required">*</span></label>
+                        <select id="education" name="education" required>
+                            <option value="">Select your education</option>
+                            <option value="high-school">High School</option>
+                            <option value="associate">Associate Degree</option>
+                            <option value="bachelor">Bachelor's Degree</option>
+                            <option value="master">Master's Degree</option>
+                            <option value="phd">Ph.D.</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="experience">Years of Experience <span class="required">*</span></label>
+                        <select id="experience" name="experience" required>
+                            <option value="">Select experience</option>
+                            <option value="0-1">0-1 years</option>
+                            <option value="1-3">1-3 years</option>
+                            <option value="3-5">3-5 years</option>
+                            <option value="5-10">5-10 years</option>
+                            <option value="10+">10+ years</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="skills">Key Skills <span class="required">*</span></label>
+                    <textarea 
+                        id="skills" 
+                        name="skills" 
+                        placeholder="e.g., JavaScript, React, Node.js, Python, Project Management..." 
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="certifications">Certifications (Optional)</label>
+                    <textarea 
+                        id="certifications" 
+                        name="certifications" 
+                        placeholder="e.g., AWS Certified Solutions Architect, PMP, Google Analytics..."
+                    ></textarea>
+                </div>
+            </div>
+            
+            <button type="submit">Find Job Leads</button>
+        </form>
+        
+        <div id="confirmation" class="confirmation">
+            ✅ Your request has been received. We'll email you job leads soon.
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('jobForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                document.getElementById('confirmation').classList.add('show');
+                this.reset();
+            })
+            .catch(error => {
+                document.getElementById('confirmation').classList.add('show');
+                this.reset();
+            });
+        });
+    </script>
+</body>
+</html>
